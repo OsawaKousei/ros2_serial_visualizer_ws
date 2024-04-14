@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  serial_visualizer:
+    container_name: serial_visualizer
+    build:
+      context: .
+      args:
+        - USER_NAME=${USER_NAME}
+        - GROUP_NAME=${GROUP_NAME}
+        - PASSWORD=${PASSWORD}
+        - UID=${UID}
+        - GID=${GID}
+        - GIT_USER_NAME=${GIT_USER_NAME}
+        - GIT_USER_EMAIL=${GIT_USER_EMAIL}
+      dockerfile: Dockerfile
+    image: n622jwith/serial_visualizer:latest
+    environment:
+      - DISPLAY=${DISPLAY}
+      - "QT_X11_NO_MITSHM=1"
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - $HOME/.Xauthority/:/home/${USER_NAME}/.Xauthority:ro
+    hostname: serial_visualizer
+    tty: true
+    privileged: true
+    user: "${UID}:${GID}"
