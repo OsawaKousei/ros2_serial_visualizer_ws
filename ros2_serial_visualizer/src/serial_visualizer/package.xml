@@ -3,11 +3,24 @@
 <package format="3">
   <name>serial_visualizer</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="jwithelis@gmail.com">kousei</maintainer>
+  <description>TODO</description>
+  <maintainer email="jwithelis@gmail.com">n622</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_auto</buildtool_depend>
+
+  <depend>rosidl_default_generators</depend>
+  <depend>rclcpp</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+
+  <depend>plotjuggler_msgs</depend>
+
+  <exec_depend>rosidl_default_runtime</exec_depend>
+  <member_of_group>rosidl_interface_packages</member_of_group>
+
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
