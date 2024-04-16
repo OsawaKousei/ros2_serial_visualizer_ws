@@ -20,11 +20,10 @@ public:
         {
             for (int i = 0; i < msg.data.size(); i++)
             {
-                buff[buff_index] = msg.data[i];
-                buff_index++;
-                if (buff_index == 8)
+                if (msg.data[i] == 0) // 文字列の最後にはNULL文字が入っているのでそれを検出する
                 {
-                    int value = atoi(buff);
+                    double value = atof(buff);
+                    printf("%s\n", buff);
 
                     plotjuggler_msgs::msg::DataPoints data;
                     data.dictionary_uuid = 1;
@@ -32,6 +31,11 @@ public:
 
                     data_pub->publish(data);
                     buff_index = 0;
+                }
+                else
+                {
+                    buff[buff_index] = msg.data[i];
+                    buff_index++;
                 }
             }
         };
@@ -44,7 +48,7 @@ private:
     rclcpp::TimerBase::SharedPtr timer_;
     rclcpp::Publisher<plotjuggler_msgs::msg::DataPoints>::SharedPtr data_pub;
 
-    char buff[8];
+    char buff[256];
     int buff_index = 0;
 
     double t = 0;
@@ -66,3 +70,7 @@ int main(int argc, char *argv[])
     rclcpp::shutdown();
     return 0;
 }
+
+// ros2 run plotjuggler plotjuggler
+// sudo chmod 777 /dev/ttyACM0
+// ros2 launch serial_driver serial_driver_bridge_node.launch.py
