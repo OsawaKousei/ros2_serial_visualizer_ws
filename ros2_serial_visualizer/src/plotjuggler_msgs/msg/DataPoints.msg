@@ -1,2 +1,4 @@
 uint32 dictionary_uuid
-plotjuggler_msgs/DataPoint[] samples
+plotjuggler_msgs/DataPoint target
+plotjuggler_msgs/DataPoint cur_val
+plotjuggler_msgs/DataPoint ctrl_val

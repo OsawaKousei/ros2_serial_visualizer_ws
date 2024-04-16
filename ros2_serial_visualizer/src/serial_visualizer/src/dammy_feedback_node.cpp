@@ -23,27 +23,16 @@ public:
         dict_pub = this->create_publisher<plotjuggler_msgs::msg::Dictionary>("plt_dict", 10);
         data_pub = this->create_publisher<plotjuggler_msgs::msg::DataPoints>("plt_data", 10);
 
-        const uint32_t UUID = 1;
-
-        plotjuggler_msgs::msg::Dictionary dict;
-
-        dict.dictionary_uuid = UUID;
-        dict.names.push_back("sensor_a"); // index 0
-        dict.names.push_back("sensor_b"); // index 1
-        dict.names.push_back("sensor_c"); // index 2
-
-        dict_pub->publish(dict);
-
         // messageをpublish(送信)するcallback関数
-        auto publish_msg_callback = [this]() -> void
-        {
-            // this->publisher_->publish(message); // publishする
+        auto publish_msg_callback = [this]() -> void { // this->publisher_->publish(message); // publishする
+            dict_publisher();
 
             plotjuggler_msgs::msg::DataPoints msg;
+
             msg.dictionary_uuid = UUID;
-            msg.samples.push_back(CreateDataPoint(0, t, std::sin(t)));
-            msg.samples.push_back(CreateDataPoint(1, t, std::cos(t)));
-            msg.samples.push_back(CreateDataPoint(2, t, 2 * std::cos(t)));
+            msg.target = CreateDataPoint(0, t, 0);
+            msg.cur_val = CreateDataPoint(0, t, sin(t));
+            msg.ctrl_val = CreateDataPoint(0, t, cos(t));
 
             data_pub->publish(msg);
 
@@ -59,7 +48,26 @@ private:
     rclcpp::Publisher<plotjuggler_msgs::msg::Dictionary>::SharedPtr dict_pub;
     rclcpp::Publisher<plotjuggler_msgs::msg::DataPoints>::SharedPtr data_pub;
 
+    const uint32_t UUID = 1;
     double t = 0;
+    int dict_frag = 0;
+
+    plotjuggler_msgs::msg::Dictionary dict;
+
+    void dict_publisher()
+    {
+        if (dict_frag == 0)
+        {
+            dict.dictionary_uuid = UUID;
+            dict.names.push_back("sensor_a"); // index 0
+            dict.names.push_back("sensor_b"); // index 1
+            dict.names.push_back("sensor_c"); // index 2
+
+            dict_frag = 1;
+        }
+
+        dict_pub->publish(dict);
+    }
 
     plotjuggler_msgs::msg::DataPoint CreateDataPoint(uint16_t name_index, double time, double value)
     {
