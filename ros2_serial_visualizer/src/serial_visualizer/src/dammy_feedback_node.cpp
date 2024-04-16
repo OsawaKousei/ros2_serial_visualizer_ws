@@ -30,9 +30,9 @@ public:
             plotjuggler_msgs::msg::DataPoints msg;
 
             msg.dictionary_uuid = UUID;
-            msg.target = CreateDataPoint(0, t, 0);
-            msg.cur_val = CreateDataPoint(0, t, sin(t));
-            msg.ctrl_val = CreateDataPoint(0, t, cos(t));
+            msg.target = CreateDataPoint(UUID, t, 0);
+            msg.cur_val = CreateDataPoint(UUID, t, sin(t));
+            msg.ctrl_val = CreateDataPoint(UUID, t, cos(t));
 
             data_pub->publish(msg);
 

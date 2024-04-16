@@ -11,6 +11,10 @@ ament_auto_add_executable(
   dammy_feedback_node src/dammy_feedback_node.cpp
 )
 
+# 実行ファイルの生成
+ament_auto_add_executable(
+  serial_convert_node src/serial_convert_node.cpp
+)
 #コンポーネントはこちら
 #ament_auto_add_library(example src/example.cpp)
 #rclcpp_components_register_nodes(example "name_space::SampleClass")
