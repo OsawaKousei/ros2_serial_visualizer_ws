@@ -20,22 +20,44 @@ public:
         {
             for (int i = 0; i < msg.data.size(); i++)
             {
-                if (msg.data[i] == 0) // 文字列の最後にはNULL文字が入っているのでそれを検出する
+                if (msg.data[i] == 'a') // 文字列の最後にはNULL文字が入っているのでそれを検出する
                 {
                     double value = atof(buff);
                     printf("%s\n", buff);
 
-                    plotjuggler_msgs::msg::DataPoints data;
                     data.dictionary_uuid = 1;
-                    data.target = CreateDataPoint(0, t, value);
 
-                    data_pub->publish(data);
-                    buff_index = 0;
+                    data.ctrl_val = CreateDataPoint(0, t, value);
                 }
-                else
+                else if (msg.data[i] == 'b')
+                {
+                    double value = atof(buff);
+                    printf("%s\n", buff);
+
+                    data.dictionary_uuid = 1;
+
+                    data.cur_val = CreateDataPoint(1, t, value);
+                }
+                else if (msg.data[i] == 'c')
+                {
+                    double value = atof(buff);
+                    printf("%s\n", buff);
+
+                    data.dictionary_uuid = 1;
+
+                    data.target = CreateDataPoint(2, t, value);
+                }
+
+                buff[buff_index] = msg.data[i];
+                buff_index++;
+
+                if (msg.data[i] == 0)
                 {
                     buff[buff_index] = msg.data[i];
-                    buff_index++;
+
+                    buff_index = 0; // バッファをリセット
+                    // printf("%s\n", buff);
+                    data_pub->publish(data);
                 }
             }
         };
@@ -48,8 +70,11 @@ private:
     rclcpp::TimerBase::SharedPtr timer_;
     rclcpp::Publisher<plotjuggler_msgs::msg::DataPoints>::SharedPtr data_pub;
 
+    plotjuggler_msgs::msg::DataPoints data;
+
     char buff[256];
     int buff_index = 0;
+    int value_index = 0;
 
     double t = 0;
 
